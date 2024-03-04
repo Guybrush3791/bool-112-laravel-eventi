@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\Event;
 use App\Models\Tag;
@@ -27,8 +28,10 @@ class EventController extends Controller
 
     public function store(Request $request)
     {
+        // get auth user
+        $user = Auth :: user();
+
         $data = $request -> all();
-        // dd($data);
 
         $event = new Event;
 
@@ -36,6 +39,8 @@ class EventController extends Controller
         $event -> description = $data['description'];
         $event -> date = $data['date'] . ' ' . $data['time'];
         $event -> location = $data['location'];
+
+        $event -> user() -> associate($user);
 
         $event -> save();
 

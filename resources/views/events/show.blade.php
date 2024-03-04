@@ -6,17 +6,22 @@
         <h1>Event: {{ $event -> title }}</h1>
 
         <br>
-        <a href="{{ route('events.edit', $event -> id) }}">EDIT</a>
-        <br>
-        <form
-            action="{{ route('events.destroy', $event -> id) }}"
-            method="POST"
-        >
-            @csrf
-            @method('DELETE')
+        @auth
+            @if (Auth::user() -> id == $event -> user_id)
 
-            <input type="submit" value="DELETE" >
-        </form>
+                <a href="{{ route('events.edit', $event -> id) }}">EDIT</a>
+                <br>
+                <form
+                    action="{{ route('events.destroy', $event -> id) }}"
+                    method="POST"
+                >
+                    @csrf
+                    @method('DELETE')
+
+                    <input type="submit" value="DELETE" >
+                </form>
+            @endif
+        @endauth
         <br>
 
         <p>{{ $event -> description }}</p>
